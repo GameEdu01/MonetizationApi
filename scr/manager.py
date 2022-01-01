@@ -24,4 +24,8 @@ class Manager:
                 if not letter in self.phoneNumberAllowedLetters:
                     accurate = False
 
+        if email:
+            if not "@" in text:
+                accurate = False
+
         return accurate

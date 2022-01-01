@@ -1,4 +1,5 @@
 import psycopg
+from psycopg.rows import dict_row
 
 
 class DBConnector:
@@ -11,7 +12,7 @@ class DBConnector:
         self.address = address
 
         self.conn = self.connect()
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor(row_factory=dict_row)
 
     def connect(self):
 
@@ -30,25 +31,15 @@ class DBConnector:
 
     def check_if_value_exists(self, key, value):
 
-        self.cursor.execute("SELECT * FROM m_users")
-        records = self.cursor.fetchall()
-        columnNames = [column[0] for column in self.cursor.description]
-        table = {}
+        self.cursor.execute("SELECT EXISTS(SELECT 1 FROM m_users WHERE {} = '{}')".format(key, value))
+        records = self.cursor.fetchone()
 
-        for i in range(len(columnNames)):
-            table[columnNames[i]] = records[i]
-
-        print(table)
-
-        if table.get(key) == value:
-            return True
-
-        return False
+        return records["exists"]
 
     def signup_user(self, user):
 
         query = f"""INSERT INTO m_users(name, surname, email, phone_number, token, session)
-                        VALUES({user.name}, {user.surname}, {user.email}, {user.phone_number}, test_token, test_session"""
+                        VALUES('{user.name}', '{user.surname}', '{user.email}', '{user.phone_number}', 'test_token', 'test_session')"""
 
         self.cursor.execute(query)
         self.conn.commit()

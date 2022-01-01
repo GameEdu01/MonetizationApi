@@ -19,7 +19,7 @@ class SignUp(BaseModel):
     phone_number: str
 
 
-@app.route("/api/signup/")
+@app.post("/api/signup")
 async def signup(user: SignUp):
 
     if not manager.check_spelling(user.name):
@@ -38,4 +38,6 @@ async def signup(user: SignUp):
 
     db.signup_user(user)
 
-    return {"message": "user signed up successfully"}
+    return {"message": "user signed up successfully",
+            "first_name": user.name,
+            "last_name": user.surname}
