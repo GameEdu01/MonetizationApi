@@ -1,6 +1,6 @@
-psycopg
-fastapi
-pydantic
+psycopg~=3.0.8
+fastapi~=0.71.0
+pydantic~=1.9.0
 cryptography
 astroid
 Click
@@ -16,3 +16,6 @@ starlette
 uvicorn
 websockets
 wrapt
+PyJWT~=2.3.0
+stellar-sdk >= 2.0.0
+requests~=2.27.1
